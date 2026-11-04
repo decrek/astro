@@ -102,14 +102,13 @@ export function createGetCollectionsMetadata({
 	liveCollections: LiveCollectionConfigMap;
 }) {
 	return async function getCollectionsMetadata(): Promise<CollectionMetadata[]> {
-		// @ts-expect-error virtual module
 		const { enabled, collections } = await import('astro:collections-metadata');
 		if (!enabled) {
 			throw new AstroError(AstroErrorData.CollectionMetadataNotEnabled);
 		}
 		// Copies, so that callers can't change the metadata returned to other callers
 		return structuredClone([
-			...(collections as CollectionMetadata[]),
+			...collections,
 			...getCollectionsMetadataOf(liveCollections, 'live'),
 		]);
 	};
